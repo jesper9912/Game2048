@@ -10,15 +10,24 @@ int main(void)
     bool test = true;
 
     for (int n = 1; n <= 10; n++) {
-        stack_push(s, pow(0.5, n));
+        stack_push(s, pow(0.5, (double) n));
 
-        if (stack_pop(s) != pow(0.5, (double) n)) {
+    }
+
+    int n = 10;
+
+    while (!stack_is_empty(s)) {
+
+        if ((stack_pop(s) != pow(0.5, (double) n)) && n > 0) {
             test = false;
 
         }
+        n--;
     }
 
-    printf("Test the functioning of the stack ... %s", test ? "PASS" : "FAIL");
+    printf("Test the functioning of the stack ... %s\n", test ? "PASS" : "FAIL");
+
+    stack_destroy(s);
 
     return 0;
 }

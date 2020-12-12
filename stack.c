@@ -6,42 +6,43 @@
 Stack *stack_create(void)
 {
     Stack *s = malloc(sizeof(*s));
-    s->capacity = 0;
+
+    s->capacity = 1;
     s->size = 0;
+    s->data = calloc(s->capacity, sizeof(*s->data));
 
     return s;
 }
 
 void stack_destroy(Stack *s)
-{
+{   
     free(s->data);
     free(s);
 }
 
 void stack_push(Stack *s, double value)
 {
+    if (s->size >= s->capacity) {
+        s->capacity *= 2;
+        s->data = realloc(s->data, s->capacity * sizeof(*s->data));
+
+    }
+    
+    s->data[s->size] = value;
     s->size += 1;
 
-    if(s->size > s->capacity) {
-        s->capacity += 1;
-        s->data = realloc(s->data,s->capacity * sizeof(s->data));
-    }
-
-    s->data[s->capacity] = value;
 }
 
 double stack_pop(Stack *s)
 {
-    double *value = s->data;
+    double value = s->data[s->size - 1];
 
-    free(s->data);
     s->size -= 1;
-    s->capacity -= 1;
 
-    return *value;
+    return value;
 }
 
 bool stack_is_empty(const Stack *s)
 {
-    return s->capacity == 0;
+    return s->size <= 0;
 }   
