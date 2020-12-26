@@ -3,12 +3,41 @@
 #include "array.h"
 #include "game.h"
 
-#define SIZE 4
+
 // Start a new game. 
 void game_new(void) 
 {
-    Array *arr = array_create(SIZE, SIZE);
-    
+  
+    array *arr = array_create(4,4);
+
+   int san, san_plats1, san_plats2 = -1;
+   san =  rand () % 10;
+   san_plats1 = rand() % 16;
+   if ( san == 0)
+   {
+      arr[san_plats1]->data = 4;
+   }
+   else
+   {
+      arr[san_plats1]->data = 2
+   }
+
+   while (sna_plats1 != sanplats2)
+   {
+      san_plats2 = rand() % 16;
+   }
+
+   san =  rand () % 10;
+
+   if ( san == 0)
+   {
+      arr[san_plats2]->data = 4;
+   }
+   else
+   {
+      arr[san_plats2]->data = 2
+   }
+   
 }
 
 // Quit the current game.
