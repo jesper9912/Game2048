@@ -8,7 +8,7 @@
 static void game_print(void)
 {   
     int value = 0;
-
+    
     for( int y = 0;  y < 4; y++ )
     {   
         printf("+--------+--------+--------+--------+\n");
@@ -35,16 +35,8 @@ static void game_print(void)
 static bool read_int(int choice)
 {   
     bool status = false;
-    int check = 0;
 
-    for (int i = 0; i < 5; i++) {
-        if (choice == i) {
-            check++;
-
-        }
-    }
-
-    if (check > 0) {
+    if (choice >= 0 && choice < 5) {
         status = true;
     }
 
@@ -54,20 +46,50 @@ static bool read_int(int choice)
 void app_run(void)
 {   
     int choice;
+    bool quit = false;
     srand(time(NULL));
 
     game_new(); 
     
-    while (!game_is_game_over() || choice == 0) {
+    while (!game_is_game_over() && !quit) {
         do {
 
         game_print();
-        scanf("%d", &choice);
-
+        if (scanf("%d", &choice) == EOF) {
+            choice = 6;
+        }
+        printf("%d", choice);
         } while (!read_int(choice));
+
+        switch (choice)
+        {
+        case 0:
+            game_quit();
+            quit = true;
+            break;
+
+        case 1:
+            game_slide_up();
+            break;
+
+        case 2:
+            game_slide_right();
+            break;
+
+        case 3:
+            game_slide_down();
+            break;
+
+        case 4:
+            game_slide_left();
+            break;
+        
+        default:
+            break;
+        }
 
     }
 
-    game_quit();
+ 
 
 }
