@@ -58,8 +58,28 @@ int game_get_square(int row, int column)
 // Slide all pieces up, right, down, or left. 
 void game_slide_up(void) 
 {
-    Array *temp = random_tiles(arr, 1);
-    arr = temp;
+void game_slide_up(void) {
+//do {
+
+for (int r = 1; r < 4; r++)
+{
+   for(int c = 0; c < 4; c++)
+   {
+      if (array_get(arr , r - 1, c ) == 0 && array_get(arr , r , c) )
+      {
+         array_set(arr , r - 1 , c ,array_get(arr , r , c) );
+         array_set(arr , r , c , 0);
+
+      }
+
+      if (array_get(arr , r - 1, c ) == array_get(arr , r , c))
+      {
+         array_set(arr , r - 1 , c ,2 * array_get(arr , r , c) );
+         array_set(arr , r  , c , 0);
+
+      }
+   }
+}
 }
 void game_slide_right(void)
 {
