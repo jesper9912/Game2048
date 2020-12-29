@@ -7,15 +7,16 @@
 
 static Array *random_tiles(Array *arr, int amount) 
 {
-    int tilepos, tile = -1, tempp = -1;
+    int posrow, poscol, tile = -1, tempr = -1, tempc = -1;
 
     for (int i = 0; i < amount; i++) {
-        tilepos = rand() % 16;
+        posrow = rand() % 4;
+        poscol = rand() % 4;
 
         do {
-            tilepos = rand() % 16;
-
-        } while (tilepos == tempp || arr->data[tilepos] != 0);
+            posrow = rand() % 4;
+            poscol = rand() % 4;
+        } while ((posrow == tempr && poscol == tempc) || array_get(arr, posrow, poscol) != 0);
 
        
             if (rand() % 10 == 0) {
@@ -27,8 +28,9 @@ static Array *random_tiles(Array *arr, int amount)
             }
         
 
-        arr->data[tilepos] = tile;
-        tempp = tilepos;
+        array_set(arr, posrow, poscol, tile);
+        tempr = posrow;
+        tempc = poscol;
     }
     
     return arr;
