@@ -45,6 +45,30 @@ void game_new(void)
     arr = random_tiles(temp, 2);
 }
 
+static bool checkOut(Array *ar)
+{
+   bool ch = false;
+   for ( int r = 1; r < 4; r++)
+   {
+      for (int c = 0; c < 4; c++)
+      {
+         //printf("fast vid andra for\n" );
+         if(array_get(arr, r, c) ){
+         if ( array_get(arr , r - 1, c ) == 0 && array_get(arr , r , c))
+         {
+            ch = true;
+         }
+
+         else if (array_get(arr , r - 1, c ) == array_get(arr , r , c))
+         {
+            ch = true;
+         }
+      }
+      }
+   }
+   return ch;
+}
+
 // Quit the current game.
 void game_quit(void)
 {   
@@ -58,11 +82,11 @@ int game_get_square(int row, int column)
 }
 
 // Slide all pieces up, right, down, or left. 
-void game_slide_up(void) 
-{
 void game_slide_up(void) {
-//do {
-
+int cnt;
+do {
+   cnt = 0;
+printf("fast vid do, i slide up\n" );
 for (int r = 1; r < 4; r++)
 {
    for(int c = 0; c < 4; c++)
@@ -74,15 +98,22 @@ for (int r = 1; r < 4; r++)
 
       }
 
-      if (array_get(arr , r - 1, c ) == array_get(arr , r , c))
+      else if ((array_get(arr , r - 1, c ) == array_get(arr , r , c)
+   )&& (array_get(arr , r - 1, c ) != 0))
       {
          array_set(arr , r - 1 , c ,2 * array_get(arr , r , c) );
          array_set(arr , r  , c , 0);
+         cnt = 3;
 
       }
    }
 }
+
+} while (checkOut(arr) && cnt != 3 );
+
+random_tiles(arr, 1);
 }
+
 void game_slide_right(void)
 {
     Array *temp = random_tiles(arr, 1);
