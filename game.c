@@ -5,44 +5,50 @@
 #include "array.h"
 #include "game.h"
 
+static Array *arr;
+static bool move = false;
+
 static Array *random_tiles(Array *arr, int amount) 
 {
     int posrow, poscol, tile = -1, tempr = -1, tempc = -1;
 
-    for (int i = 0; i < amount; i++) {
-        posrow = rand() % 4;
-        poscol = rand() % 4;
-
-        do {
+    if (move == true) {
+        for (int i = 0; i < amount; i++) {
             posrow = rand() % 4;
             poscol = rand() % 4;
-        } while ((posrow == tempr && poscol == tempc) || array_get(arr, posrow, poscol) != 0);
 
-       
-            if (rand() % 10 == 0) {
-                tile = 4;
+            do {
+                posrow = rand() % 4;
+                poscol = rand() % 4;
+            } while ((posrow == tempr && poscol == tempc) || array_get(arr, posrow, poscol) != 0);
 
-            } else {
-                tile = 2;
 
-            }
-        
+                if (rand() % 10 == 0) {
+                    tile = 4;
 
-        array_set(arr, posrow, poscol, tile);
-        tempr = posrow;
-        tempc = poscol;
+                } else {
+                    tile = 2;
+
+                }
+
+
+            array_set(arr, posrow, poscol, tile);
+            tempr = posrow;
+            tempc = poscol;
+        }
     }
     
+
     return arr;
 }
-
-static Array *arr;
 
 // Start a new game. 
 void game_new(void) 
 {  
+    move = true;
     Array *temp = array_create(4, 4);
     arr = random_tiles(temp, 2);
+    move = false;
 }
 
 static bool checkOut(Array *ar)
@@ -95,7 +101,7 @@ for (int r = 1; r < 4; r++)
       {
          array_set(arr , r - 1 , c ,array_get(arr , r , c) );
          array_set(arr , r , c , 0);
-
+         move = true;
       }
 
       else if ((array_get(arr , r - 1, c ) == array_get(arr , r , c)
@@ -104,7 +110,7 @@ for (int r = 1; r < 4; r++)
          array_set(arr , r - 1 , c ,2 * array_get(arr , r , c) );
          array_set(arr , r  , c , 0);
          cnt = 3;
-
+         move = true;
       }
    }
 }
@@ -112,6 +118,7 @@ for (int r = 1; r < 4; r++)
 } while (checkOut(arr) && cnt != 3 );
 
 random_tiles(arr, 1);
+    move = false;
 }
 
 void game_slide_right(void)
