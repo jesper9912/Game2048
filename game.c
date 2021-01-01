@@ -75,6 +75,78 @@ static bool checkOut(Array *ar)
    return ch;
 }
 
+static bool checkOutRight(Array *ar)
+{
+   bool ch = false;
+   for ( int r = 0; r < 4; r++)
+   {
+      for (int c = 2; c >= 0; c--)
+      {
+         if(array_get(arr, r, c) )
+         {
+            if ( array_get(arr , r , c + 1 ) == 0 && array_get(arr , r , c))
+            {
+               ch = true;
+            }
+
+            else if (array_get(arr , r , c + 1 ) == array_get(arr , r , c))
+            {
+               ch = true;
+            }
+         }
+      }
+   }
+   return ch;
+}
+
+static bool checkOutDown(Array *ar)
+{
+   bool ch = false;
+   for ( int r = 2; r >= 0; r--)
+   {
+      for (int c = 0; c < 4; c++)
+      {
+         if(array_get(arr, r, c) )
+         {
+            if ( array_get(arr , r + 1, c ) == 0 && array_get(arr , r , c))
+            {
+               ch = true;
+            }
+
+            else if (array_get(arr , r + 1, c ) == array_get(arr , r , c))
+            {
+               ch = true;
+            }
+         }
+      }
+   }
+   return ch;
+}
+
+static bool checkOutleft(Array *ar)
+{
+   bool ch = false;
+   for ( int r = 0; r < 4; r++)
+   {
+      for (int c = 1; c < 4; c++)
+      {
+         if(array_get(arr, r, c) )
+         {
+            if ( array_get(arr , r , c - 1 ) == 0 && array_get(arr , r , c))
+            {
+               ch = true;
+            }
+
+            else if (array_get(arr , r , c - 1 ) == array_get(arr , r , c))
+            {
+               ch = true;
+            }
+         }
+      }
+   }
+   return ch;
+}
+
 // Quit the current game.
 void game_quit(void)
 {   
@@ -123,18 +195,105 @@ random_tiles(arr, 1);
 
 void game_slide_right(void)
 {
-    Array *temp = random_tiles(arr, 1);
-    arr = temp;
+    int cnt;
+   do {
+      cnt = 0;
+
+      for (int r = 0; r < 4; r++)
+      {
+         for(int c = 2; c >= 0; c--)
+         {
+            if (array_get(arr , r , c + 1 ) == 0 && array_get(arr , r , c) )
+            {
+               array_set(arr , r , c + 1,array_get(arr , r , c) );
+               array_set(arr , r , c , 0);
+               move = true;
+            }
+
+            else if ((array_get(arr , r , c + 1 ) == array_get(arr , r , c)
+                     )&& (array_get(arr , r, c ) != 0))
+            {
+               array_set(arr , r , c + 1 ,2 * array_get(arr , r , c) );
+               array_set(arr , r  , c , 0);
+               cnt = 3;
+               move = true;
+            }
+         }
+      }
+
+   } while (checkOutRight(arr) && cnt != 3 );
+
+   random_tiles(arr, 1);
+    move = false;
+
 } 
 void game_slide_down(void)
 {
-    Array *temp = random_tiles(arr, 1);
-    arr = temp;
+   printf("1\n" );
+   int cnt;
+   do {
+      cnt = 0;
+
+      for (int r = 2; r >= 0; r--)
+      {
+         printf("for 1\n");
+         for(int c = 0; c < 4; c++)
+         {
+            printf("for 2\n" );
+            if (array_get(arr , r + 1, c ) == 0 && array_get(arr , r , c) )
+            {
+               array_set(arr , r + 1 , c ,array_get(arr , r , c) );
+               array_set(arr , r , c , 0);
+               move = true;
+            }
+
+            else if ((array_get(arr , r + 1, c ) == array_get(arr , r , c)
+                     )&& (array_get(arr , r + 1, c ) != 0))
+            {
+               array_set(arr , r + 1 , c ,2 * array_get(arr , r , c) );
+               array_set(arr , r  , c , 0);
+               cnt = 3;
+               move = true;
+            }
+         }
+      }
+
+   } while (checkOutDown(arr) && cnt != 3 );
+
+   random_tiles(arr, 1);
+    move = false;
 }
 void game_slide_left(void)
 {
-    Array *temp = random_tiles(arr, 1);
-    arr = temp;
+   int cnt;
+   do {
+      cnt = 0;
+      for (int r = 0; r < 4; r++)
+      {
+         for(int c = 1; c < 4; c++)
+         {
+            if (array_get(arr , r, c -1 ) == 0 && array_get(arr , r , c) )
+            {
+               array_set(arr , r , c - 1 ,array_get(arr , r , c) );
+               array_set(arr , r , c , 0);
+               move = true;
+            }
+
+            else if ((array_get(arr , r , c - 1 ) == array_get(arr , r , c)
+                     )&& (array_get(arr , r, c ) != 0))
+            {
+               array_set(arr , r , c - 1 ,2 * array_get(arr , r , c) );
+               array_set(arr , r  , c , 0);
+               cnt = 3;
+               move = true;
+            }
+         }
+      }
+
+   } while (checkOutleft(arr) && cnt != 3 );
+
+   random_tiles(arr, 1);
+   move = false;
 }
 
 // Return true if the game is over (2048 reached or no empty squares).
